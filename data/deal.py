@@ -9,4 +9,4 @@ with open("n_pos.csv", "w") as n:
             n.write(line)
 
 line = "\""
-print len(line)
+print(len(line))

@@ -51,7 +51,7 @@ def create_dictionaries(model=None,
         combined= sequence.pad_sequences(combined, maxlen=maxlen)#每个句子所含词语对应的索引，所以句子中含有频数小于10的词语，索引为0
         return w2indx, w2vec,combined
     else:
-        print 'No data provided...'
+        print('No data provided...')
 
 
 def input_transform(string):
@@ -63,12 +63,12 @@ def input_transform(string):
 
 
 def lstm_predict(string):
-    print 'loading model......'
+    print('loading model......')
     with open('../model/lstm.yml', 'r') as f:
         yaml_string = yaml.load(f)
     model = model_from_yaml(yaml_string)
 
-    print 'loading weights......'
+    print('loading weights......')
     model.load_weights('../model/lstm.h5')
     model.compile(loss='categorical_crossentropy',
                   optimizer='adam',metrics=['accuracy'])
@@ -78,11 +78,11 @@ def lstm_predict(string):
     result=model.predict_classes(data)
     # print result # [[1]]
     if result[0]==1:
-        print string,' positive'
+        print(string,' positive')
     elif result[0]==0:
-        print string,' neural'
+        print(string,' neural')
     else:
-        print string,' negative'
+        print(string,' negative')
 
 
 if __name__=='__main__':
