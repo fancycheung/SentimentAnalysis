@@ -17,6 +17,7 @@ from sklearn.cross_validation import train_test_split
 from keras.models import Sequential
 from keras.layers.embeddings import Embedding
 from keras.layers.recurrent import LSTM
+from keras.layers import Bidirectional
 from keras.layers.core import Dense, Dropout,Activation
 from keras.models import model_from_yaml
 np.random.seed(1337)  # For Reproducibility
@@ -131,7 +132,7 @@ def train_lstm(n_symbols,embedding_weights,x_train,y_train,x_test,y_test):
                         mask_zero=True,
                         weights=[embedding_weights],
                         input_length=input_length))  # Adding Input Length
-    model.add(LSTM(output_dim=60, activation='tanh'))
+    model.add(Bidirectional(LSTM(output_dim=60, activation='tanh')))
     model.add(Dropout(0.5))
     model.add(Dense(3, activation='softmax')) # Dense=>全连接层,输出维度=3
     model.add(Activation('softmax'))
@@ -153,18 +154,18 @@ def train_lstm(n_symbols,embedding_weights,x_train,y_train,x_test,y_test):
     model.save_weights('../model/lstm.h5')
     print('Test score:', score)
 
+if __name__=='__main__':
+    #训练模型，并保存
+    print('Loading Data...')
+    combined,y=loadfile()
+    print(len(combined),len(y))
+    print('Tokenising...')
+    combined = tokenizer(combined)
+    print('Training a Word2vec model...')
+    index_dict, word_vectors,combined=word2vec_train(combined)
 
-#训练模型，并保存
-print('Loading Data...')
-combined,y=loadfile()
-print(len(combined),len(y))
-print('Tokenising...')
-combined = tokenizer(combined)
-print('Training a Word2vec model...')
-index_dict, word_vectors,combined=word2vec_train(combined)
-
-print('Setting up Arrays for Keras Embedding Layer...')
-n_symbols,embedding_weights,x_train,y_train,x_test,y_test=get_data(index_dict, word_vectors,combined,y)
-print("x_train.shape and y_train.shape:")
-print(x_train.shape,y_train.shape)
-train_lstm(n_symbols,embedding_weights,x_train,y_train,x_test,y_test)
+    print('Setting up Arrays for Keras Embedding Layer...')
+    n_symbols,embedding_weights,x_train,y_train,x_test,y_test=get_data(index_dict, word_vectors,combined,y)
+    print("x_train.shape and y_train.shape:")
+    print(x_train.shape,y_train.shape)
+    train_lstm(n_symbols,embedding_weights,x_train,y_train,x_test,y_test)
