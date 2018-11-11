@@ -81,7 +81,7 @@ def lstm_predict(string):
 
 
 if __name__=='__main__':
-    log = Logger.Logger('rj_analysis.log', level='debug')
+    log = Logger.Logger('yf_analysis.log', level='debug')
     print('loading model......')
     with open('../model/lstm.yml', 'r') as f:
         yaml_string = yaml.load(f)
@@ -92,7 +92,7 @@ if __name__=='__main__':
     model.compile(loss='categorical_crossentropy',
                   optimizer='adam', metrics=['accuracy'])
 
-    with open('../rj.txt', 'r', encoding='UTF-8') as f:
+    with open('../yf.txt', 'r', encoding='UTF-8') as f:
         list = f.readlines()
         for i in range(0, len(list)):
             lstm_predict(list[i])
